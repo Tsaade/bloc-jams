@@ -46,7 +46,7 @@ var albumTarek = {
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
         '<tr class="album-view-song-item">'
-        + '  <td class="song-item-number">' + songNumber + '</td>'
+        + '  <td class="song-item-number" data-song-number= "' + songNumber + '">' + songNumber + '</td>'
         + '  <td class="song-item-title">' + songName + '</td>'
         + '  <td class="song-item-duration">' + songLength + '</td>'
         + '</tr>'
@@ -55,11 +55,14 @@ var createSongRow = function(songNumber, songName, songLength) {
     return template;
 };
 
-var albumTitle = document.getElementsByClassName('album-view-title')[0];
-var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-var albumImage = document.getElementsByClassName('album-cover-art')[0];
-var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+var albumTitle          = document.getElementsByClassName('album-view-title')[0];
+var albumArtist         = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo    = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage          = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList       = document.getElementsByClassName('album-view-song-list')[0];
+var songListContainer   = document.getElementsByClassName('album-view-song-list')[0];
+var songRows            = document.getElementsByClassName('album-view-song-item');
+var playButtonTemplate  = '<a class="album-song-button"><span class="ion-play"></span></a>';
 
 var setCurrentAlbum = function(album) {
     albumTitle.firstChild.nodeValue = album.title;
@@ -73,10 +76,21 @@ var setCurrentAlbum = function(album) {
         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
     }
 };
- 
+
 window.onload = function() {
     setCurrentAlbum(albumPicasso);
+    songListContainer.addEventListener('mouseover', function(event) {
+        //console.log(event.target);
+        if (event.target.parentElement.className === 'album-view-song-item') {
+            event.target.parentElement.querySelector('.song-item-number').innerHTML = playButtonTemplate;
+        }
+    });
 
+    for (var i = 0; i < songRows.length; i++) {
+        songRows[i].addEventListener('mouseleave', function(event) {
+           this.children[0].innerHTML = this.children[0].getAttribute('data-song-number'); 
+        });
+    }
 
 // When clicking on an album cover, the page toggles between the three album objects.
 // so I need to add a mouse click event Listener, then I need to loop through the objects
