@@ -88,7 +88,6 @@ var getSongItem = function(element) {
 };
 
 var mouseOverHandler = function(event) {
-    //console.log(event.target);
     var songItem = getSongItem(this);
     var songItemNumber = songItem.getAttribute('data-song-number');
 
@@ -98,7 +97,6 @@ var mouseOverHandler = function(event) {
 };
 
 var mouseLeaveHandler = function(event) {
-    //this.children[0].innerHTML = this.children[0].getAttribute('data-song-number'); 
     var songItem = getSongItem(this);
     var songItemNumber = songItem.getAttribute('data-song-number');
 
@@ -111,7 +109,7 @@ var mouseLeaveHandler = function(event) {
 var clickHandler = function(event) {
     var songItem = getSongItem(this);
     
-    //Conditional checking for the state of trhe currently playing song
+    //Conditional checking for the state of the currently playing song
     //and setting the state of the button to pause if null.
     if (currentlyPlayingSong === null) {
         songItem.innerHTML = pauseButtonTemplate;
