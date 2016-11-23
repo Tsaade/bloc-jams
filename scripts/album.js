@@ -46,25 +46,11 @@ var albumTarek = {
     ]
 };
 
-var createSongRow = function(songNumber, songName, songLength) {
-    var template =
-        '<tr class="album-view-song-item">'
-        + '  <td class="song-item-number" data-song-number= "' + songNumber + '">' + songNumber + '</td>'
-        + '  <td class="song-item-title">' + songName + '</td>'
-        + '  <td class="song-item-duration">' + songLength + '</td>'
-        + '</tr>'
-        ;
- 
-    return $(template);
-};
-
 var $albumTitle          = $('.album-view-title');
 var $albumArtist         = $('.album-view-artist');
 var $albumReleaseInfo    = $('.album-view-release-info');
 var $albumImage          = $('.album-cover-art');
 var $albumSongList       = $('.album-view-song-list');
-var songListContainer   = document.getElementsByClassName('album-view-song-list')[0];
-var songRows            = document.getElementsByClassName('album-view-song-item');
 var playButtonTemplate  = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 
@@ -82,70 +68,61 @@ var setCurrentAlbum = function(album) {
     }
 };
 
-
-//Getting the song item with class name .song-item-number
-var getSongItem = function(element) {
-    return element.querySelector('.song-item-number'); 
-};
-
-var mouseOverHandler = function(event) {
-    var songItem = getSongItem(this);
-    var songItemNumber = songItem.getAttribute('data-song-number');
-
-    if (songItemNumber !== currentlyPlayingSong) {
-        songItem.innerHTML = playButtonTemplate;
-    }
-};
-
-var mouseLeaveHandler = function(event) {
-    var songItem = getSongItem(this);
-    var songItemNumber = songItem.getAttribute('data-song-number');
-
-    if (songItemNumber !== currentlyPlayingSong) {
-        songItem.innerHTML = songItemNumber;
-    }
-};
-
-//Adding the clickhandler function.
-var clickHandler = function(event) {
-    var songItem = getSongItem(this);
-    
-    //Conditional checking for the state of the currently playing song
-    //and setting the state of the button to pause if null.
-    if (currentlyPlayingSong === null) {
-        songItem.innerHTML = pauseButtonTemplate;
-        currentlyPlayingSong = songItem.getAttribute('data-song-number');
-    
-    //Conditional to revert the button back to the play button if the play button is 
-    //clicked on another song
-    } else if (currentlyPlayingSong === songItem.getAttribute('data-song-number')) {
-        songItem.innerHTML = playButtonTemplate;
-        currentlyPlayingSong = null;
-    
-    //If the clicked song is not the active song, set the content of the new song 
-    //to the pause button
-    } else if (currentlyPlayingSong !== songItem.getAttribute('data-song-number')) {
-        var currentlyPlayingSongElement = document.querySelector('[data-song-number="' + currentlyPlayingSong + '"]');
-        currentlyPlayingSongElement.innerHTML = currentlyPlayingSongElement.getAttribute('data-song-number');
-        songItem.innerHTML = pauseButtonTemplate;
-        currentlyPlayingSong = songItem.getAttribute('data-song-number');
-    }    
-};
+$(window).load(function() {setCurrentAlbum(albumPicasso);});
+//$(Document).ready(function() {setCurrentAlbum(albumPicasso);});
 
 var currentlyPlayingSong = null;
 
-window.onload = function() {
-    setCurrentAlbum(albumPicasso);
-    
+var createSongRow = function(songNumber, songName, songLength) {
+    var template =
+        '<tr class="album-view-song-item">'
+        + '  <td class="song-item-number" data-song-number= "' + songNumber + '">' + songNumber + '</td>'
+        + '  <td class="song-item-title">' + songName + '</td>'
+        + '  <td class="song-item-duration">' + songLength + '</td>'
+        + '</tr>'
+        ;
+ 
+    var $row = $(template);
 
-    for (var i = 0; i < songRows.length; i++) {
-        songRows[i].addEventListener('mouseover', mouseOverHandler);
-        
-        songRows[i].addEventListener('mouseleave', mouseLeaveHandler);
-        
-        //Adding an event listener to clicking the play button
-        songRows[i].addEventListener('click', clickHandler);
-    }
+    var clickHandler = function() {
+        var songNumber = $(this).attr('data-song-number');
+
+        if (currentlyPlayingSong !== null) {
+            var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSong + '"]');
+            currentlyPlayingCell.html(currentlyPlayingSong);
+        }
+
+        if (currentlyPlayingSong !== songNumber) {
+            $(this).html(pauseButtonTemplate);
+            currentlyPlayingSong = songNumber;
+        } else if (currentlyPlayingSong === songNumber) {
+            $(this).html(playButtonTemplate);
+            currentlyPlayingSong = null;
+        }
+    };    
+
+    var onHover = function(event) {
+        var songNumberCell = $(this).find('.song-item-number');
+        var songNumber = songNumberCell.attr('data-song-number');
+
+        if (songNumber !== currentlyPlayingSong) {
+            songNumberCell.html(playButtonTemplate);
+        }
+    };
+
+    var offHover = function(event) {
+        var songNumberCell = $(this).find('.song-item-number');
+        var songNumber = songNumberCell.attr('data-song-number');
+
+        if (songNumber !== currentlyPlayingSong) {
+            songNumberCell.html(songNumber);
+        }
+    };
+    
+    $row.find('.song-item-number').click(clickHandler);
+    $row.hover(onHover, offHover);
+    return $row;
+};
 
 // When clicking on an album cover, the page toggles between the three album objects.
 // so I need to add a mouse click event Listener, then I need to loop through the objects
@@ -158,11 +135,10 @@ window.onload = function() {
     
     var albumObjects = [albumPicasso, albumMarconi, albumTarek];
     var i = 1;
-    albumImage.addEventListener('click', function(clickEvent) {
+    $albumImage.click(function(clickEvent) {
         setCurrentAlbum(albumObjects[i]);
         i++;
         if (i == albumObjects.length) {
             i = 0;
         }
     });
-};
