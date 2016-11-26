@@ -40,6 +40,31 @@ var currentSongFromAlbum = null;
 var $previousButton = $('.main-controls .previous');
 var $nextButton = $('.main-controls .next');
 
+/* Assignment 19-Part A: getSong function:
+
+the function takes one argument-songNumber
+assigns currentlyPlayingSongNumber & currentSongFromAlbum a new value based on the new song number.
+
+*/
+
+var getSong = function(songNumber) {
+        currentlyPlayingSongNumber = parseInt(songNumber);
+        currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+};
+
+/* Assignment 19-Part B: getSongNumberCell function:
+
+The function takes one argument-number
+returns the song number element that corresponds to that song number.
+
+*/
+
+var getSongNumberCell = function(number) {
+    return $('.song-item-number[data-song-number="' + number + '"]');
+};
+
+/* End assignment 19. */
+
 var updatePlayerBarSong = function() {
 
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);
@@ -51,7 +76,7 @@ var updatePlayerBarSong = function() {
 
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
-        '<tr class="album-view-song-item">'
+         '<tr class="album-view-song-item">'
         + '  <td class="song-item-number" data-song-number= "' + songNumber + '">' + songNumber + '</td>'
         + '  <td class="song-item-title">' + songName + '</td>'
         + '  <td class="song-item-duration">' + songLength + '</td>'
@@ -64,18 +89,20 @@ var createSongRow = function(songNumber, songName, songLength) {
         var songNumber = parseInt($(this).attr('data-song-number'));
         
         if (currentlyPlayingSongNumber !== null) {
-            var currentlyPlayingCell = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
+            var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
             currentlyPlayingCell.html(currentlyPlayingSongNumber);
         }
 
         if (currentlyPlayingSongNumber !== songNumber) {
             $(this).html(pauseButtonTemplate);
-            currentlyPlayingSongNumber= songNumber;
-            currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
+            getSong(songNumber);
+            //currentlyPlayingSongNumber= songNumber;
+            //currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
             updatePlayerBarSong();
         } else if (currentlyPlayingSongNumber === songNumber) {
             $(this).html(playButtonTemplate);
             $('.main-controls .play-pause').html(playerBarPlayButton);
+            //getSong(songNumber);
             currentlyPlayingSongNumber = null;
             currentSongFromAlbum = null;
         }
@@ -96,7 +123,6 @@ var createSongRow = function(songNumber, songName, songLength) {
         
         if (songNumber !== currentlyPlayingSongNumber) {
             songNumberCell.html(songNumber);
-            console.log("songNumber type is " + typeof songNumber + "\n and currentlyPlayingSongNumber type is " + typeof currentlyPlayingSongNumber);
         }
     };
     
