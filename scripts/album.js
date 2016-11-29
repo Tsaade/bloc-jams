@@ -3,6 +3,7 @@ var $albumArtist            = $('.album-view-artist');
 var $albumReleaseInfo       = $('.album-view-release-info');
 var $albumImage             = $('.album-cover-art');
 var $albumSongList          = $('.album-view-song-list');
+var $playerBarPlayPause     = $('.main-controls .play-pause')
 var playButtonTemplate      = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate     = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 var playerBarPlayButton     = '<span class="ion-play"></span>';
@@ -33,6 +34,7 @@ $(document).ready(function() {
     $previousButton.click(previousSong);
     //$nextButton.click(nextPrevSong);
     $nextButton.click(nextSong);
+    $playerBarPlayPause.click(togglePlayfromPlayerBar);
 });
 
 var currentAlbum = null;
@@ -94,6 +96,37 @@ var updatePlayerBarSong = function() {
     $('.main-controls .play-pause').html(playerBarPauseButton);
 
 };
+
+/*
+Assignment 20:
+A function so users can toggle play and pause from the playerbar
+
+The function takes no arguments and works based on a conditional that:
+    If a song is paused and the play button is clicked in the player bar, it will
+        Change the song number cell from a play button to a pause button
+        Change the HTML of the player bar's play button to a pause button
+        Play the song
+    If the song is playing (so a current sound file exist), and the pause button is clicked
+        Change the song number cell from a pause button to a play button
+        Change the HTML of the player bar's pause button to a play button
+        Pause the song
+*/
+
+var togglePlayfromPlayerBar = function () {
+    var $songRow = $('.song-item-number[data-song-number="' + currentlyPlayingSongNumber + '"]');
+    
+    if (currentSoundFile && currentSoundFile.isPaused()) {
+        $songRow.html(pauseButtonTemplate);
+        $playerBarPlayPause.html(playerBarPauseButton);
+        currentSoundFile.play();
+    } else if (currentSoundFile) {
+        $songRow.html(playButtonTemplate);
+        $playerBarPlayPause.html(playerBarPlayButton);
+        currentSoundFile.pause();
+    }
+};
+
+// End assigment 20.
 
 var createSongRow = function(songNumber, songName, songLength) {
     var template =
@@ -159,6 +192,17 @@ var createSongRow = function(songNumber, songName, songLength) {
     $row.hover(onHover, offHover);
     return $row;
 };
+
+//var nextPrevSong = function() {
+
+//    var $this = $(this);  
+//    if ( $this.hasClass('previous') ) {
+//        // Do previous
+//    }
+//    else if ( $this.hasClass('next') ) {
+//        // Do next
+//    }
+//};
 
 //var nextPrevSong = function() {
 //
