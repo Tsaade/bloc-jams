@@ -31,6 +31,9 @@ var updateSeekBarWhileSongPlays = function() {
             var $seekBar = $('.seek-control .seek-bar');
             
             updateSeekPercentage($seekBar, seekBarFillRatio);
+            
+            setCurrentTimeInPlayerBar(this.getTime());
+            setTotalTimeInPlayerBar(this.getDuration());
         });
     }
 };
@@ -162,6 +165,8 @@ var updatePlayerBarSong = function() {
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
+    
+    setTotalTimeInPlayerBar();
 
 };
 
@@ -195,6 +200,58 @@ var togglePlayfromPlayerBar = function () {
 };
 
 // End assigment 20.
+
+/* Assignment 21:
+    1- A function called setCurrentTimeInPlayerBar() that takes one argument: currentTime
+        This function will:
+            Set the text of the element with .current-time class to the current time of the song.
+            Call setCurrentTimeInPlayerBar() in updateSeekBarWhileSongPlays().
+            
+    2- A function called setTotalTimeInPlayerBar() that takes one argument: totalTime
+        This function will:
+            Set the text of the element with .total-time class to the length of the song.
+            Call setTotalTimeInPlayerBar() in updatePlayerBarSong().
+            
+    3- A function called filterTimeCode() that takes one argument: timeInSeconds
+        This function will:
+            Use the parseFloat() method to get the seconds in number form.
+            Store variables for whole seconds and whole minutes (hint: use Math.floor() to round numbers down).
+            Return the time in the format X:XX
+
+    4- Wrap the arguments passed to setCurrentTimeInPlayerBar() and setTotalTimeInPlayerBar() in a filterTimeCode()
+        call so the time output below the seek bar is formatted.
+
+    5- Wrap the songLength variable in createSongRow() in a filterTimeCode() call so the time lengths are formatted.
+*/
+
+    var $songTime = $('.currently-playing .current-time');
+    var $songDuration = $('.currently-playing .total-time');
+
+    var setCurrentTimeInPlayerBar = function(currentTime) {
+        $songTime.text(filterTimeCode(currentTime));
+    };
+
+    var setTotalTimeInPlayerBar = function(totalTime) {
+        $songDuration.text(filterTimeCode(totalTime));
+    };
+
+    var filterTimeCode = function(timeInSeconds) {
+        var parsedSeconds = parseFloat(timeInSeconds);
+        var getMinutes = Math.floor(parsedSeconds / 60); 
+        var getSeconds = Math.floor(parsedSeconds % 60);
+
+        if (getSeconds < 10) {
+            getSeconds = "0" + getSeconds;
+        } else {
+            getSeconds = getSeconds;
+        }
+        
+        return getMinutes + ":" + getSeconds;
+
+        setTotalTimeInPlayerBar();
+    };
+
+/* End assignment 21 */
 
 var createSongRow = function(songNumber, songName, songLength) {
     var template =

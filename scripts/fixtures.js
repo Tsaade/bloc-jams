@@ -22,11 +22,11 @@ var albumMarconi = {
     year: '1909',
     albumArtUrl: 'assets/images/album_covers/20.png',
     songs: [
-        { title: 'Hello, Operator?', duration: '1:01' },
-        { title: 'Ring, ring, ring', duration: '5:01' },
-        { title: 'Fits in your pocket', duration: '3:21'},
-        { title: 'Can you hear me now?', duration: '3:14' },
-        { title: 'Wrong phone number', duration: '2:15'}
+        { title: 'Hello, Operator?', duration: 161.71 },
+        { title: 'Ring, ring, ring', duration: 103.96 },
+        { title: 'Fits in your pocket', duration: 268.45},
+        { title: 'Can you hear me now?', duration: 153.14},
+        { title: 'Wrong phone number', duration: 374.22}
     ]
 };
 
@@ -38,10 +38,10 @@ var albumTarek = {
     year: '2016',
     albumArtUrl: 'assets/images/album_covers/02.png',
     songs: [
-        { title: 'Write me, write me good', duration: '2:42' },
-        { title: 'Functions of Love', duration: '3:24' },
-        { title: 'The Objects of my Desire', duration: '3:21'},
-        { title: 'My light Array', duration: '3:14' },
-        { title: 'Programing Forever', duration: '2:15'}
+        { title: 'Write me, write me good', duration: 161.71 },
+        { title: 'Functions of Love', duration: 103.96 },
+        { title: 'The Objects of my Desire', duration: 268.45},
+        { title: 'My light Array', duration: 153.14},
+        { title: 'Programing Forever', duration: 374.22}
     ]
 };
